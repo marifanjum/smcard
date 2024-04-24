@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Manipulation</title>
+<style>
+  #canvasContainer {
+    position: relative;
+    width: 1200px;
+    height: 720px;
+    border: 2px solid black;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  #canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: move;
+  }
+</style>
+</head>
+<body>
+  <input type="file" id="imageInput" accept="image/*">
+  <div id="canvasContainer">
+    <canvas id="canvas" width="1200" height="720"></canvas>
+  </div>
+  <button id="stretchButton">Fit by Stretch</button>
+  <button id="fitLongestSideButton">Fit on Longest Side</button>
+  <button id="centerButton">Center Image</button>
+  <button id="downloadCanvasButton">Download Resized Image</button>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const imageInput = document.getElementById('imageInput');
+    const stretchButton = document.getElementById('stretchButton');
+    const fitLongestSideButton = document.getElementById('fitLongestSideButton');
+    const centerButton = document.getElementById('centerButton');
+    const downloadCanvasButton = document.getElementById('downloadCanvasButton');
+
+    let image = null;
+    let offsetX = 0;
+    let offsetY = 0;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let scale = 1;
+
+    // Function to handle file selection event
+    const handleFileChange = event => {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        loadImage(event.target.result);
+      };
+      reader.readAsDataURL(file);
+    };
+
+    // Function to load image onto canvas
+    const loadImage = src => {
+      image = new Image();
+      image.onload = function() {
+        fitImageToCanvas();
+      };
+      image.src = src;
+    };
+
+    // Function to draw image on canvas
+    const drawImage = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(image, offsetX, offsetY, image.width * scale, image.height * scale);
+    };
+
+    // Function to fit image to canvas by stretching
+    const fitByStretch = () => {
+      offsetX = 0;
+      offsetY = 0;
+      scale = Math.min(canvas.width / image.width, canvas.height / image.height);
+      drawImage();
+    };
+
+    // Function to fit image to canvas on the longest side
+    const fitOnLongestSide = () => {
+      offsetX = 0;
+      offsetY = 0;
+      if (image.width > image.height) {
+        scale = canvas.width / image.width;
+      } else {
+        scale = canvas.height / image.height;
+      }
+      drawImage();
+    };
+
+    // Function to center image on canvas
+    const centerImage = () => {
+      offsetX = (canvas.width - image.width * scale) / 2;
+      offsetY = (canvas.height - image.height * scale) / 2;
+      drawImage();
+    };
+
+    // Function to handle mouse down event
+    const handleMouseDown = event => {
+      isDragging = true;
+      startX = event.clientX - offsetX;
+      startY = event.clientY - offsetY;
+    };
+
+    // Function to handle mouse move event
+    const handleMouseMove = event => {
+      if (!isDragging) return;
+      const mouseX = event.clientX;
+      const mouseY = event.clientY;
+      offsetX = mouseX - startX;
+      offsetY = mouseY - startY;
+      drawImage();
+    };
+
+    // Function to handle mouse up event
+    const handleMouseUp = () => {
+      isDragging = false;
+    };
+
+    // Function to handle mouse wheel event
+    const handleMouseWheel = event => {
+      event.preventDefault();
+      const delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
+      const zoomSpeed = 0.1;
+      const zoomFactor = 1 + zoomSpeed * delta;
+      scale *= zoomFactor;
+      drawImage();
+    };
+
+    // Function to download canvas as PNG image
+    const downloadCanvas = () => {
+      const link = document.createElement('a');
+      link.download = 'resized.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+
+    // Add event listeners
+    imageInput.addEventListener('change', handleFileChange);
+    canvas.addEventListener('mousedown', handleMouseDown);
+    canvas.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+    canvas.addEventListener('mousewheel', handleMouseWheel);
+    canvas.addEventListener('DOMMouseScroll', handleMouseWheel);
+    stretchButton.addEventListener('click', fitByStretch);
+    fitLongestSideButton.addEventListener('click', fitOnLongestSide);
+    centerButton.addEventListener('click', centerImage);
+    downloadCanvasButton.addEventListener('click', downloadCanvas);
+  </script>
+</body>
+</html>
