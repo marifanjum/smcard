@@ -128,7 +128,7 @@
       const canvas = document.getElementById('outputCanvas');
       const link = document.createElement('a');
       link.download = 'combined_image.webp'; // Change the file name as needed
-      link.href = canvas.toDataURL('Image/webp', 0.5);
+      link.href = canvas.toDataURL('Image/webp', 1.0);
       link.click();
     }
 
