@@ -23,6 +23,7 @@
 </style>
 </head>
 <body>
+  
   <div id="canvasContainer">
     <canvas id="canvas" width="1200" height="720"></canvas>
   </div>
@@ -30,11 +31,9 @@
   <button id="fitLongestSideButton">Fit on Longest Side</button>
   <button id="centerButton">Center Image</button>
   <button id="downloadCanvasButton">Download Resized Image</button>
-  
   <br />
-<br />
-<br />
-<br />
+  <br />
+  <br />
   <input type="file" id="imageInput" accept="image/*">
 
   <script>
@@ -55,6 +54,8 @@
     let scale = 1;
 
     let lastTouchDistance = 0;
+    let lastTouchX = 0;
+    let lastTouchY = 0;
 
     // Function to handle file selection event
     const handleFileChange = event => {
@@ -143,7 +144,10 @@
 
     // Function to handle touch start event
     const handleTouchStart = event => {
-      if (event.touches.length === 2) {
+      if (event.touches.length === 1) {
+        lastTouchX = event.touches[0].clientX;
+        lastTouchY = event.touches[0].clientY;
+      } else if (event.touches.length === 2) {
         lastTouchDistance = Math.hypot(
           event.touches[0].clientX - event.touches[1].clientX,
           event.touches[0].clientY - event.touches[1].clientY
@@ -154,7 +158,15 @@
     // Function to handle touch move event
     const handleTouchMove = event => {
       event.preventDefault();
-      if (event.touches.length === 2) {
+      if (event.touches.length === 1 && !isDragging) {
+        const touchX = event.touches[0].clientX;
+        const touchY = event.touches[0].clientY;
+        offsetX += touchX - lastTouchX;
+        offsetY += touchY - lastTouchY;
+        lastTouchX = touchX;
+        lastTouchY = touchY;
+        drawImage();
+      } else if (event.touches.length === 2) {
         const touchDistance = Math.hypot(
           event.touches[0].clientX - event.touches[1].clientX,
           event.touches[0].clientY - event.touches[1].clientY
@@ -172,17 +184,12 @@
     };
 
     // Function to download canvas as WebP image
-  
-      // Trigger download
-	  
-	   const downloadCanvas = () => {
+     const downloadCanvas = () => {
       const link = document.createElement('a');
       link.download = 'resized.webp';
-      link.href = canvas.toDataURL('image/webp', 0.1);
+      link.href = canvas.toDataURL('image/webp', 0.5);
       link.click();
     };
-	
-     
 
     // Add event listeners
     imageInput.addEventListener('change', handleFileChange);
