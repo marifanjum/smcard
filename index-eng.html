@@ -8,20 +8,20 @@
   #outputCanvas {
     border: 1px solid black;
   }
-
-  @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
 </style>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
-  
 </head>
+
+
 <body>
   <input type="file" id="foregroundInput" accept="image/*">
   <input type="text" size="100" id="textInput" placeholder="Enter text">
   <button onclick="combineImageAndText()">Combine</button><br>
   <canvas id="outputCanvas"></canvas>
+  <button id="downloadButton">Download Image</button>
 
   <script>
     function combineImageAndText() {
@@ -103,7 +103,7 @@
       let line = '';
       let yPos = y;
       const lineHeight = fontSize * 0.8; // Line height matches font size
-let  btMargin = 100;
+      let btMargin = 100;
 
       for (let i = 0; i < words.length; i++) {
         const testLine = line + words[i] + ' ';
@@ -114,16 +114,27 @@ let  btMargin = 100;
           ctx.fillText(line.trim(), x, yPos);
           line = words[i] + ' ';
           yPos += lineHeight; // Move to the next line
-
         } else {
           line = testLine;
-btMargin = 60;
+          btMargin = 60;
         }
       }
 
-ctx.fillText(line.trim(), x, yPos + btMargin); // Add bottom margin
-
+      ctx.fillText(line.trim(), x, yPos + btMargin); // Add bottom margin
     }
+
+    // Function to download canvas as image
+    function downloadCanvas() {
+      const canvas = document.getElementById('outputCanvas');
+      const link = document.createElement('a');
+      link.download = 'combined_image.png'; // Change the file name as needed
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+
+    // Add event listener for download button
+    const downloadButton = document.getElementById('downloadButton');
+    downloadButton.addEventListener('click', downloadCanvas);
   </script>
 </body>
 </html>
