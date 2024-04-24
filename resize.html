@@ -49,6 +49,8 @@
     let startY = 0;
     let scale = 1;
 
+    let lastTouchDistance = 0;
+
     // Function to handle file selection event
     const handleFileChange = event => {
       const file = event.target.files[0];
@@ -134,13 +136,48 @@
       drawImage();
     };
 
-    // Function to download canvas as PNG image
-    const downloadCanvas = () => {
+    // Function to handle touch start event
+    const handleTouchStart = event => {
+      if (event.touches.length === 2) {
+        lastTouchDistance = Math.hypot(
+          event.touches[0].clientX - event.touches[1].clientX,
+          event.touches[0].clientY - event.touches[1].clientY
+        );
+      }
+    };
+
+    // Function to handle touch move event
+    const handleTouchMove = event => {
+      event.preventDefault();
+      if (event.touches.length === 2) {
+        const touchDistance = Math.hypot(
+          event.touches[0].clientX - event.touches[1].clientX,
+          event.touches[0].clientY - event.touches[1].clientY
+        );
+        const zoomFactor = touchDistance / lastTouchDistance;
+        scale *= zoomFactor;
+        lastTouchDistance = touchDistance;
+        drawImage();
+      }
+    };
+
+    // Function to handle touch end event
+    const handleTouchEnd = () => {
+      lastTouchDistance = 0;
+    };
+
+    // Function to download canvas as WebP image
+  
+      // Trigger download
+	  
+	   const downloadCanvas = () => {
       const link = document.createElement('a');
-      link.download = 'resized.png';
-      link.href = canvas.toDataURL('image/png');
+      link.download = 'resized.webp';
+      link.href = canvas.toDataURL('image/webp', 0.1);
       link.click();
     };
+	
+     
 
     // Add event listeners
     imageInput.addEventListener('change', handleFileChange);
@@ -149,6 +186,9 @@
     document.addEventListener('mouseup', handleMouseUp);
     canvas.addEventListener('mousewheel', handleMouseWheel);
     canvas.addEventListener('DOMMouseScroll', handleMouseWheel);
+    canvas.addEventListener('touchstart', handleTouchStart);
+    canvas.addEventListener('touchmove', handleTouchMove);
+    canvas.addEventListener('touchend', handleTouchEnd);
     stretchButton.addEventListener('click', fitByStretch);
     fitLongestSideButton.addEventListener('click', fitOnLongestSide);
     centerButton.addEventListener('click', centerImage);
