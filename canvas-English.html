@@ -224,7 +224,7 @@ const fitByStretch = () => {
         drawWrappedText(newsCtx, headline, newsCanvas.width / 2, newsCanvas.height - 250, 900, 60, 'bold', 'Roboto Slab', '#006163', 5);
 
         // Draw the logo image
-        const logoX = newsCanvas.width - 115 - 10; // 10px from right
+        const logoX = newsCanvas.width - 115 - 0; // 10px from right
         const logoY = 90; // 10px from top
         newsCtx.drawImage(logoImage, logoX, logoY, 115, 115);
       };
@@ -237,7 +237,7 @@ const fitByStretch = () => {
       ctx.fillStyle = color;
       ctx.textAlign = 'center'; // Center align text horizontally
       ctx.textBaseline = 'bottom'; // Align text baseline to the bottom
-      ctx.shadowColor = 'rgba(0, 97, 99, 0.23)'; // Shadow color
+      ctx.shadowColor = 'rgba(0, 97, 99, 0.25)'; // Shadow color
       ctx.shadowBlur = 0; // Shadow blur
       ctx.shadowOffsetX = shadowOffset; // Shadow offset X
       ctx.shadowOffsetY = shadowOffset; // Shadow offset Y
