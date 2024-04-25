@@ -218,6 +218,7 @@
     // Function to generate the news canvas
     const generateNewsCanvas = () => {
       const headline = headlineInput.value;
+	
       newsCtx.drawImage(backgroundImage, 0, 0, newsCanvas.width, newsCanvas.height);
 
       // Draw the canvas content image
@@ -225,7 +226,6 @@
 	  
       canvasImage.onload = function() {
 	newsCtx.fillStyle = 'white'; // Set border color
-        newsCtx.fillRect(x - 1, y - 1, scaledWidth + 2, scaledHeight + 2); // Draw white border
         newsCtx.drawImage(canvasImage, 25, 70, 1030, 611);
 
         // Draw the headline
