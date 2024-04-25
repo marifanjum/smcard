@@ -224,6 +224,8 @@
       const canvasImage = new Image();
 	  
       canvasImage.onload = function() {
+	newsCtx.fillStyle = 'white'; // Set border color
+        newsCtx.fillRect(x - 1, y - 1, scaledWidth + 2, scaledHeight + 2); // Draw white border
         newsCtx.drawImage(canvasImage, 25, 70, 1030, 611);
 
         // Draw the headline
