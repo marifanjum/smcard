@@ -9,7 +9,7 @@
     font-family: 'Urdu Najd v3';
     src: url('https://raw.githubusercontent.com/marifanjum/smcard/blob/main/UrduNajdv3.woff2') format('woff2'),
         url('https://raw.githubusercontent.com/marifanjum/smcard/blob/main/UrduNajdv3.woff') format('woff');
-    font-weight: bold;
+    font-weight: normal;
     font-style: normal;
     font-display: swap;
 }
@@ -225,7 +225,7 @@
         newsCtx.drawImage(canvasImage, 25, 70, 1030, 611);
 
         // Draw the headline
-        drawWrappedText(newsCtx, headline, newsCanvas.width / 2, newsCanvas.height - 250, 900, 60, 'bold', 'Urdu Najd v3', '#006163', 4);
+        drawWrappedText(newsCtx, headline, newsCanvas.width / 2, newsCanvas.height - 250, 900, 60, 'normal', 'Urdu Najd v3', '#006163', 5);
 
         // Draw the logo image
         const logoX = newsCanvas.width - 115 - 10; // 10px from right
@@ -241,8 +241,8 @@
       ctx.fillStyle = color;
       ctx.textAlign = 'center'; // Center align text horizontally
       ctx.textBaseline = 'bottom'; // Align text baseline to the bottom
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)'; // Shadow color
-      ctx.shadowBlur = 5; // Shadow blur
+      ctx.shadowColor = 'rgba(0, 97, 99, 0.23)'; // Shadow color
+      ctx.shadowBlur = 0; // Shadow blur
       ctx.shadowOffsetX = shadowOffset; // Shadow offset X
       ctx.shadowOffsetY = shadowOffset; // Shadow offset Y
       ctx.direction = 'rtl'; // Set text direction to RTL
