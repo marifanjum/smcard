@@ -225,17 +225,23 @@
       const canvasImage = new Image();
 	    
 	canvasImage.onload = function() {
-    // Draw white border
+    // Get the dimensions of the canvas image
+    const imageWidth = canvasImage.width;
+    const imageHeight = canvasImage.height;
+
+    // Set the border size based on the image dimensions
     const borderWidth = 1; // Adjust border width as needed
     const borderX = 25 - borderWidth; // Adjust X position to accommodate the border
     const borderY = 70 - borderWidth; // Adjust Y position to accommodate the border
-    const borderWidthWithImage = 1030 + 2 * borderWidth; // Adjust width to accommodate the border
-    const borderHeightWithImage = 611 + 2 * borderWidth; // Adjust height to accommodate the border
+    const borderWidthWithImage = imageWidth + 2 * borderWidth; // Adjust width to accommodate the border
+    const borderHeightWithImage = imageHeight + 2 * borderWidth; // Adjust height to accommodate the border
+
+    // Draw white border
     newsCtx.fillStyle = "#FFFFFF"; // White color
     newsCtx.fillRect(borderX, borderY, borderWidthWithImage, borderHeightWithImage);
 
     // Draw the canvas image on top of the white border
-    newsCtx.drawImage(canvasImage, 25, 70, 1030, 611);
+    newsCtx.drawImage(canvasImage, 25, 70, imageWidth, imageHeight);
 
     // Draw the headline
     drawWrappedText(newsCtx, headline, newsCanvas.width / 2, newsCanvas.height - 250, 900, 60, 'normal', 'Urdu Najd v3', '#006163', 5);
@@ -245,6 +251,7 @@
     const logoY = 90; // 10px from top
     newsCtx.drawImage(logoImage, logoX, logoY, 115, 115);
 };
+
 
       canvasImage.src = canvas.toDataURL('image/png');
     };
